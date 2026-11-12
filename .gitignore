@@ -1,0 +1,4 @@
+build/
+zygisk_out/
+*.zip
+.DS_Store

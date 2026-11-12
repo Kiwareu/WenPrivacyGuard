@@ -1,0 +1,12 @@
+#!/sbin/sh
+# Minimal Magisk/KernelSU/APatch installer stub.
+# The real installer is provided by the root manager (it replaces this file
+# at flash time with its own update-binary). This stub only exists so the
+# zip has a complete, standard structure and `unzip -l` shows META-INF.
+# Do not put install logic here; all logic lives in customize.sh.
+OUTFD="$2"
+ZIPFILE="$3"
+ui_print() { echo -e "ui_print $1\nui_print" >> /proc/self/fd/$OUTFD; }
+ui_print "Wen Privacy Guard: use Magisk / KernelSU / APatch Manager to flash."
+ui_print "This stub is not a standalone installer."
+exit 0

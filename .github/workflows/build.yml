@@ -1,0 +1,38 @@
+name: Build WenPrivacyGuard
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: android-actions/setup-android@v3
+      - name: Install NDK 27.2.12479018 and CMake 3.22.1
+        run: |
+          echo "$ANDROID_HOME/cmdline-tools/latest/bin" >> "$GITHUB_PATH"
+          echo "$ANDROID_HOME/platform-tools" >> "$GITHUB_PATH"
+          yes | sdkmanager --licenses || true
+          sdkmanager "ndk;27.2.12479018" "cmake;3.22.1"
+          echo "ANDROID_NDK_HOME=$ANDROID_HOME/ndk/27.2.12479018" >> "$GITHUB_ENV"
+          ls "$ANDROID_HOME/ndk/27.2.12479018/build/cmake/android.toolchain.cmake"
+      - name: Build native .so and package zip
+        run: chmod +x build.sh make_zip.sh && ./build.sh
+      - name: Verify real arm64 .so is in the zip
+        run: |
+          ls -lh zygisk_out/arm64-v8a.so WenPrivacyGuard-*.zip
+          file zygisk_out/arm64-v8a.so
+          file zygisk_out/arm64-v8a.so | grep -q "ARM aarch64" || (echo "NOT an arm64 .so" && exit 1)
+          unzip -l WenPrivacyGuard-*.zip
+          if unzip -l WenPrivacyGuard-*.zip | grep -q PLACEHOLDER; then echo "PLACEHOLDER still in zip" && exit 1; fi
+          unzip -p WenPrivacyGuard-*.zip zygisk/arm64-v8a.so > /tmp/check.so
+          file /tmp/check.so | grep -q "ARM aarch64" || (echo ".so inside zip is not arm64" && exit 1)
+          echo "Verified: real arm64 .so in zip."
+      - uses: actions/upload-artifact@v4
+        with:
+          name: WenPrivacyGuard
+          path: 'WenPrivacyGuard-*.zip'
+          if-no-files-found: error

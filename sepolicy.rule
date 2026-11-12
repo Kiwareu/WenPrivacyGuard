@@ -1,0 +1,6 @@
+# Wen Privacy Guard - minimal, least-privilege rules.
+# No execmem / execmod, no injection into audioserver, no partition access.
+# The module only reads its own config under /data/adb/modules/wenprivacyguard
+# and writes its own logs. It does not need to touch system_server internals.
+allow zygote wenprivacyguard_data_file:dir { search read };
+allow zygote wenprivacyguard_data_file:file { read open getattr };

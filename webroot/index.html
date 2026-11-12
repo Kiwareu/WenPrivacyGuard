@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Wen Privacy Guard</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="top">
+  <h1>隐私保护</h1>
+  <p class="sub">Wen Privacy Guard · 全部免费 · 全部自选</p>
+  <div id="rootBanner" class="banner warn hidden"></div>
+  <div id="tempBanner" class="banner danger hidden"></div>
+</header>
+
+<main>
+  <section class="card status">
+    <div class="row"><span>模块状态</span><strong id="modStatus">未启用</strong></div>
+    <div class="row"><span>Root 方案</span><strong id="rootSolution">—</strong></div>
+    <div class="row"><span>Bootloader</span><strong id="blState">—</strong></div>
+    <div class="row"><span>Root 类型</span><strong id="rootType">—</strong></div>
+    <p class="hint">正式 Root 才能用全部功能。临时 Root（未解锁 BL）会自动隐藏高风险功能，这是保护，不是限制。</p>
+    <label class="switch-row">
+      <span>启用模块<small>关闭后开机不执行任何操作</small></span>
+      <button class="switch" id="swEnabled" role="switch" aria-checked="false"><span class="knob"></span></button>
+    </label>
+  </section>
+
+  <section class="card">
+    <h2>遥测组件</h2>
+    <p class="hint">只停用你勾选的组件。方式一律是可逆的 <code>pm disable-user --user 0</code>，卸载模块或取消勾选即可恢复。取消勾选不会留残留。</p>
+    <div id="vendorList"></div>
+    <div class="actions">
+      <button id="btnClearAll" class="btn secondary">全部关闭 / 清空</button>
+      <button id="btnSave" class="btn primary">保存</button>
+    </div>
+    <p id="saveMsg" class="hint hidden">已保存。重启后生效；取消勾选的组件会在下次开机时恢复。</p>
+  </section>
+
+  <section class="card">
+    <h2>应用列表保护</h2>
+    <p class="hint">可选。开启后，仅限制遥测组件自身通过包管理器查询到的内容，不对银行、游戏、工作类应用隐藏任何应用，也不改任何设备标识。</p>
+    <label class="switch-row">
+      <span>应用列表保护<small>默认关闭</small></span>
+      <button class="switch" id="swAppList" role="switch" aria-checked="false"><span class="knob"></span></button>
+    </label>
+  </section>
+
+  <section class="card muted">
+    <h2>不做的事</h2>
+    <p class="hint">本模块不伪装 IMEI / MAC / SIM / GAID / Widevine，不伪造 GPS、运营商、Build 信息，不绕过许可证检查，不禁用签名验证，不绕过 Play Protect，不绕过 FLAG_SECURE。这些不是隐私功能，是伪造身份和绕过检测的工具，本模块有意不实现。想拦截遥测域名走网络侧：Lowex 代理规则里已有 OPPO 34 / 小米 41 域（v1.7.25），代理开启时生效。</p>
+  </section>
+</main>
+
+<script src="js/app.js"></script>
+</body>
+</html>
